@@ -43,10 +43,10 @@ sync-type = rsync
 sync-uri = rsync://rsync.europe.gentoo.org/gentoo-portage
 " > /etc/portage/repos.conf/gentoo.conf
 	emerge --sync
-	eselect profile set 3
-	emerge -j --newuse --deep --with-bdeps=y @system @world
+	eselect profile set default/linux/arm/13.0/desktop
+	emerge -j 1 --newuse --deep --with-bdeps=y @system @world
 	emerge -C editor ssh man man-pages openrc e2fsprogs service-manager
-	emerge -j layman
+	emerge -j 1 layman
 	emerge --depclean
 	rm -rf /usr/portage/packages
 ' )
