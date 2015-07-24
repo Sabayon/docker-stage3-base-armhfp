@@ -22,7 +22,7 @@ image="gentoo-temp:$base"
 container="gentoo-temp-$base"
 
 # bzcat thanks to https://code.google.com/p/go/issues/detail?id=7279
-( set -x; bzcat -p "$name" | docker import - "$image" )
+( set -x; bzcat "$name" | docker import - "$image" )
 
 docker rm -f "$container" > /dev/null 2>&1 || true
 ( set -x; docker run -t --name "$container" "$image" bash -exc $'
@@ -61,5 +61,5 @@ echo 'FROM scratch' > Dockerfile
 echo "ADD $xz /" >> Dockerfile
 echo 'CMD ["/bin/bash"]' >> Dockerfile
 
-( set -x; docker build -t "sabayon/gentoo-stage3-base-amd64" . )
+( set -x; docker build -t "sabayon/gentoo-stage3-base-armhf" . )
 
