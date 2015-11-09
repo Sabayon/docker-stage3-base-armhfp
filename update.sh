@@ -25,7 +25,7 @@ container="gentoo-temp-$base"
 ( set -x; bzcat "$name" | docker import - "$image" )
 
 docker rm -f "$container" > /dev/null 2>&1 || true
-( set -x; docker run -t --name "$container" "$image" bash -exc $'
+( set -x; docker run -t -v "$PWD"/artifacts:/usr/portage/packages --name "$container" "$image" bash -exc $'
 	export MAKEOPTS="-j$(nproc)"
 	#pythonTarget="$(emerge --info | sed -n \'s/.*PYTHON_TARGETS="\\([^"]*\\)".*/\\1/p\')"
 	#pythonTarget="${pythonTarget##* }"
@@ -44,15 +44,15 @@ sync-uri = rsync://rsync.europe.gentoo.org/gentoo-portage
 " > /etc/portage/repos.conf/gentoo.conf
 	emerge --sync
 	eselect profile set default/linux/arm/13.0/desktop
-	emerge -j 1 --newuse --deep --with-bdeps=y @system @world
+	emerge --buildpkg -j 2 --newuse --deep --with-bdeps=y @system @world
 	emerge -C editor ssh man man-pages openrc e2fsprogs service-manager
-	emerge -j 1 layman
+	emerge --buildpkg -j 2 layman
 	emerge --depclean
 	rm -rf /usr/portage/packages
 ' )
 
-xz="$base.tar.xz"
-( set -x; docker export "$container" | xz -9 > "$xz" )
+xz="$base.tar"
+( set -x; docker export "$container" > "$xz" )
 
 docker rm "$container"
 docker rmi "$image"
