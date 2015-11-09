@@ -61,5 +61,5 @@ echo 'FROM scratch' > Dockerfile
 echo "ADD $xz /" >> Dockerfile
 echo 'CMD ["/bin/bash"]' >> Dockerfile
 
-( set -x; docker build -t "sabayon/gentoo-stage3-base-armhf" . )
+( set -x; docker build -t "sabayon/gentoo-stage3-base-armhfp" . )
 
